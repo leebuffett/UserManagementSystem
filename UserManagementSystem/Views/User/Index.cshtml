@@ -1,0 +1,100 @@
+﻿@model IPagedList<Assignment.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using PagedList;
+@using PagedList.Mvc;
+
+<style type="text/css">
+    table, td, th {
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+
+    th {
+        background-color: lightgrey;
+    }
+</style>
+
+<h2>Welcome @User.Identity.Name</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Username", "Index", new { sortBy = ViewBag.SortNameParameter })
+        </th>
+        <th>
+            @Html.ActionLink("Full Name", "Index", new { sortBy = ViewBag.SortFullNameParameter })
+        </th>
+        <th>
+            @Html.ActionLink("Join Date", "Index", new { sortBy = ViewBag.SortDateParameter })
+        </th>
+        <th>
+            @Html.ActionLink("Team Name", "Index", new { sortBy = ViewBag.SortTeamParameter })
+        </th>
+        <th>
+            @Html.ActionLink("Position Name", "Index", new { sortBy = ViewBag.SortPositionParameter })
+        </th>
+        <th>
+            @Html.ActionLink("Status Name", "Index", new { sortBy = ViewBag.SortStatusParameter })
+        </th>
+
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.JoinDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team.TeamName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position.positionName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.currentStatus)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+            </td>
+            <td>
+                @if (item.Username != User.Identity.Name)
+                {
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Confirm to delete this employee ? ');" })
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.PagedListPager(Model, page=>Url.Action("Index", new {page, sortBy=Request["sortBy"] }))
+
+
+
